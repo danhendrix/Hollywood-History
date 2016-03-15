@@ -1,11 +1,12 @@
 body {
-	background-color: lightgrey;
+  padding-top: 50px;
+  padding-left: 100px;
 }
-
-h1 {
-	font-size: 48px;
+.bar {
+  display: inline-block;
 }
-
-p {
-	color: green;
+#barChart {
+  width: 600px;
+  height: 250px;
+  background-color: 'gold';
 }
