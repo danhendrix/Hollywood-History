@@ -5,8 +5,16 @@ body {
 .bar {
   display: inline-block;
 }
-#barChart {
+
+#scatterChart {
   width: 600px;
   height: 250px;
-  background-color: 'gold';
+  background-color: #EFE;
+}
+.bubble {
+  display: inline-block;
+  fill: tomato;
+  fill-opacity: 0.5;
+  stroke: black;
+  stroke-weight: 1px;
 }

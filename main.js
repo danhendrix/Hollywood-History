@@ -1,4 +1,4 @@
-var enronData = [
+var dataSet = [
   {Name: 'METTS MARK',
   Info: 
   {
@@ -18,50 +18,36 @@ var enronData = [
   'Stock Value': 6678735}}
   ]
 
+var margin = { top:0, right:0, bottom:0, left:0};
+var width = 600 - margin.left - margin.right;
+var height = 250 - margin.top - margin.bottom;
 
-
-var dataSet = [];
-
-for(var i=0; i<enronData.length;i++){
-  dataSet.push(enronData[i].Info.Salary)
-}
-var h = 250;
-var w = 600;
+var svg = d3.select('#scatterChart').append('svg')
+  .attr('width', width + margin.left + margin.right)
+  .attr('height', height + margin.top + margin.bottom)
+  .append('g')
+  .attr('transform', 'translate(' +margin.left + ', ' + margin.top  + ')');
 
 var yScale = d3.scale.linear()
-  .domain([0,d3.max(dataSet) *1.1])
-  .range([0, h])
+  .domain([0, d3.max(dataSet, function(data) {
+           return data.Info.Bonus;
+           })]) // domain now with d3.max
+  .range([height, 0]); // set yScale linear
+var xScale = d3.scale.linear() 
+  .domain([0,100])
+  .range([0,width]);
 
-var xScale = d3.scale.ordinal()
-  .domain(dataSet)
-  .rangeBands([0,w], 0.5, 0.25)
-              
-var colorScale = d3.scale.quantize()
-  .domain([0,1, dataSet.length-1,
-          dataSet.length])
-  .range(['tomato', 'gold', 'cornflowerBlue'])
-
-var svg = d3.select('#barChart').append('svg')
-  .attr('width', w)
-  .attr('height', h);
-
-
-
-svg.selectAll('rect') // using svg variable reference
+svg.selectAll('circle')
   .data(dataSet)
-  .enter() // starting d3
-  .append('rect') // creating a rect this time
-  .attr('class', 'bar') // assigning class
-  .attr('x', function(data, index) {
-    return xScale(data)
+  .enter()
+  .append('circle')
+  .attr('class', 'bubble')
+  .attr('cx', function(data) {
+    return xScale(data.Info.Salary)/100000; // using xScale on data
   })
-  .attr('y', function(data) {
-    return h - yScale(data)
+  .attr('cy', function(data) {
+    return yScale(data.Info.Bonus)/100000; // using yScale on data
   })
-  .attr('width', xScale.rangeBand)
-  .style('height', function(data) {
-    return yScale(data) // returning data for height value; Note no px is needed with svg
-  })
-  .attr('fill', function(data, index){
-    return colorScale(index)
+  .attr('r', function(data){
+    return (data.Info['Stock Value'])/100000
 })
