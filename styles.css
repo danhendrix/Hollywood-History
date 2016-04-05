@@ -6,6 +6,9 @@ body {
   width: 800px;
   height: 500px;
   background-color: #F2F9FC;
+  border-style: solid;
+  border-width: 5px;
+  border-color: black;
 }
 .axis path, .axis line {
   fill: none;

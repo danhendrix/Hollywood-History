@@ -1,7 +1,7 @@
 var whichOne = 931;
 
 function changeCandidate(){
-	possibleList = [931,14172];
+	possibleList = [931,14172, 13920];
 	var pick = (Math.floor(Math.random() * possibleList.length));
 	whichOne = possibleList[pick];
 	d3.select("svg").remove();
@@ -29,21 +29,42 @@ function plotIt(whichOne){
     var dataSet = data.map(function(item) {
       return {
         date: parseDate(item.tran_date),
-        amount: +item.amount
+        amount: item.amount
       }
     })
+
+    function sortByDates(a,b){
+      return a.date - b.date;
+    }
+
+   /* var nested = d3.nest()
+      .key(function(d) {return d.date})
+      .rollup(function(values) {
+        return d3.sum(values, function(d){
+          return d.amount;
+        })
+      }
+      .entries(dataSet);
+)
+      var nestedArr = nested.map(function(d){
+        return {
+          date: parseDate(d.key),
+          amount: d.values
+        }
+      });
   
+*/  
     var dates = _.map(dataSet, 'date');
+    var amounts = _.map(dataSet, 'amount');
 
     var x = d3.time.scale()
       .domain(d3.extent(dates))
       .range([0, width]);
     var y = d3.scale.linear()
-      .domain([0, d3.max(dataSet, function(d) { 
-        return d.amount; 
-      })])
-    
+      .domain(d3.extent(amounts)) 
       .range([height, 0]);
+
+      dataSet.sort(sortByDates);
 
     
     var xAxis = d3.svg.axis().scale(x)
