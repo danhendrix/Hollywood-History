@@ -19,7 +19,11 @@ var dataSet = [
   ]
 
 var margin = { top:0, right:0, bottom:0, left:0};
+<<<<<<< HEAD
 var width = 500 - margin.left - margin.right;
+=======
+var width = 600 - margin.left - margin.right;
+>>>>>>> f33bb9918aef74bfb1345622341aa292f651775b
 var height = 250 - margin.top - margin.bottom;
 
 var svg = d3.select('#scatterChart').append('svg')
@@ -34,9 +38,13 @@ var yScale = d3.scale.linear()
            })]) // domain now with d3.max
   .range([height, 0]); // set yScale linear
 var xScale = d3.scale.linear() 
+<<<<<<< HEAD
   .domain([0, d3.max(dataSet, function(data){
     return data.Info.Salary;
   })])
+=======
+  .domain([0,100])
+>>>>>>> f33bb9918aef74bfb1345622341aa292f651775b
   .range([0,width]);
 
 svg.selectAll('circle')
@@ -45,10 +53,17 @@ svg.selectAll('circle')
   .append('circle')
   .attr('class', 'bubble')
   .attr('cx', function(data) {
+<<<<<<< HEAD
     return xScale(data.Info.Salary); // using xScale on data
   })
   .attr('cy', function(data) {
     return yScale(data.Info.Bonus); // using yScale on data
+=======
+    return xScale(data.Info.Salary)/100000; // using xScale on data
+  })
+  .attr('cy', function(data) {
+    return yScale(data.Info.Bonus)/100000; // using yScale on data
+>>>>>>> f33bb9918aef74bfb1345622341aa292f651775b
   })
   .attr('r', function(data){
     return (data.Info['Stock Value'])/100000

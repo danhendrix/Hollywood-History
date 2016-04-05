@@ -2,16 +2,23 @@ body {
   padding-top: 50px;
   padding-left: 100px;
 }
-
-#scatterChart {
-  width: 500px;
-  height: 250px;
-  background-color: #EFE;
+#content {
+  width: 800px;
+  height: 500px;
+  background-color: #F2F9FC;
 }
-.bubble {
-  display: inline-block;
-  fill: tomato;
-  fill-opacity: 0.5;
-  stroke: black;
-  stroke-weight: 1px;
+.axis path, .axis line {
+  fill: none;
+  stroke: #000;
+  stroke-width: 1px;
+  shape-rendering: crispEdges;
+}
+g {
+  font-family: Lato;
+  font-size: 12px;
+}
+.line {
+  stroke: cornflowerBlue;
+  stroke-width: 1px;
+  fill: none;
 }
