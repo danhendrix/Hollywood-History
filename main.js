@@ -1,4 +1,4 @@
-/*
+
 function changeCandidate(){
 	possibleList = [931,13920];
 	var pick = (Math.floor(Math.random() * possibleList.length));
@@ -8,11 +8,12 @@ function changeCandidate(){
 	.then(function(value){
 		return formatData(value)
 	})
+	
 	.then(function(value){
 		return visualize(value)
 	})
 };
-*/
+
 
 var margin = {
 top: 20,
@@ -33,7 +34,7 @@ var line = d3.svg.line()
 	.y(function(d) {
 		return y(d.amount);
 	})
-	.interpolate('linear');
+	.interpolate('basis');
   
 var svg = d3.select('#content').append('svg')
   .attr('width', width + margin.left + margin.right)
@@ -80,7 +81,7 @@ function fetchData(id){
 function formatData(data){
 	var dataSet = data.map(function(item){
 		return {
-			data: parseDate(item.tran_date),
+			date: parseDate(item.tran_date),
 			amount: item.amount
 		}
 	});
@@ -101,12 +102,17 @@ function visualize(data) {
 	var updateSvg = d3.select("#content").transition();
 	
 	updateSvg.select(".line")
+		.transition()
+		.style("stroke", "red")
 		.duration(500)
 		.attr("d", line(data))
 	updateSvg.select(".x.axis")
+		.transition()
+		.style("color", "red")
 		.duration(500)
 		.call(xAxis);
 	updateSvg.select(".y.axis")
+		.transition()
 		.duration(500)
 		.call(yAxis);
 }
