@@ -38,9 +38,9 @@ function getMovieData(idList){
 		$.getJSON(url)
 		.done(function(data){
 			debugger;
-			resultsList.push(resolve(data));
+			resolve(resultsList.push(data));
 			console.log(resultsList);
-			console.log(data);
+			//console.log(data);
 			})
 		})
 	}
