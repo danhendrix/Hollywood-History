@@ -17,49 +17,53 @@ function formatSearch(data){
 		return item.imdbID;
 	})
 	return searchData;
+	console.log(searchData);
+	debugger;
 };
 var mySearch = movieSearch("Apollo","")
 
-mySearch.then(function(data){
-	console.log(data);
+var promiseTest = mySearch.then(function(data){
+	getMovieData(data);
 })
+
 
 
 var listOfIds = ["tt0372784", "tt0096895"]
 //console.log(getMovieData(listOfIds))
 
-var newSearch = getMovieData(listOfIds)
+//var newSearch = getMovieData(listOfIds);
+
 
 function getMovieData(idList){
-	resultsList = [];
-	for(i in idList){
-		var results = new Promise(function(resolve,reject){
-		var url = 'http://www.omdbapi.com/?i='+idList[i]+'&plot=short&r=json';
-		$.getJSON(url)
-		.done(function(data){
-			debugger;
-			resolve(resultsList.push(data));
-			console.log(resultsList);
-			//console.log(data);
+	resultsList = new Promise(function(resolve,reject){
+		for(i in idList){
+			var results = new Promise(function(resolve,reject){
+			var url = 'http://www.omdbapi.com/?i='+idList[i]+'&plot=short&r=json';
+			$.getJSON(url)
+			.done(function(data){
+				resolve(resultsList.push(data));
+				})
 			})
-		})
-	}
-	
-	return resultsList;
+		}
+		debugger;
+	return resolve(resultsList);
+})
 }
-
 
 function formatMovieData(data){
+	debugger;
 	var movieData = data.map(function(item){
-		console.log(data)
-		return {
-			released: item.Released,
-			title: item.Title,
-			rating: item.imdbRating,
-			poster: item.Poster
-		}
+	return {
+		Title: item.Title,
+		Released: item.Released,
+		Rating: item.imdbRating,
+		Poster: item.Poster
+	}
 	})
+	return movieData;
 }
+
+
 
 
 var margin = {
