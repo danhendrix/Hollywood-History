@@ -17,13 +17,11 @@ function formatSearch(data){
 		return item.imdbID;
 	})
 	return searchData;
-	console.log(searchData);
-	debugger;
 };
 var mySearch = movieSearch("Apollo","")
 
 var promiseTest = mySearch.then(function(data){
-	getMovieData(data);
+	return data;
 })
 
 
@@ -31,24 +29,22 @@ var promiseTest = mySearch.then(function(data){
 var listOfIds = ["tt0372784", "tt0096895"]
 //console.log(getMovieData(listOfIds))
 
-//var newSearch = getMovieData(listOfIds);
+var newSearch = getMovieData(listOfIds);
 
 
 function getMovieData(idList){
-	resultsList = new Promise(function(resolve,reject){
+	var resultsList = []
 		for(i in idList){
-			var results = new Promise(function(resolve,reject){
 			var url = 'http://www.omdbapi.com/?i='+idList[i]+'&plot=short&r=json';
+			var movieResults = new Promise(function(resolve,reject){			
 			$.getJSON(url)
-			.done(function(data){
-				resolve(resultsList.push(data));
+			.then(function(data){
+				return resolve(resultsList.push(data));
 				})
-			})
-		}
-		debugger;
-	return resolve(resultsList);
-})
+		})}
+	return resultsList;
 }
+
 
 function formatMovieData(data){
 	debugger;
