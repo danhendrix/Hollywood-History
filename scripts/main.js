@@ -8,53 +8,23 @@ var margin = {
 var width = 1200 - margin.left - margin.right;
 var height = 400 - margin.top - margin.bottom;
 
-
-
-var mySearch = movieSearch("Apollo","")
-
-
-
-
-var listOfIds = ["tt0372784", "tt0096895"]
-//console.log(getMovieData(listOfIds))
-
-//var newSearch = getMovieData(listOfIds);
-
+var mySearch = movieSearch("Martin")
 
 function getMovieData(idList){
 	var resultsList = []
 		for(i in idList){
 			var url = 'http://www.omdbapi.com/?i='+idList[i]+'&plot=short&r=json';
 			var movieResults = new Promise(function(resolve,reject){	
-			debugger
 			$.getJSON(url)
 			.then(function(data){
 				return resolve(resultsList.push(data));
 				})
 		})}
 	return resultsList;
-	debugger;
-}
-
-
-function formatMovieData(data){
-	debugger;
-	var movieData = data.map(function(item){
-	return {
-		Title: item.Title,
-		Released: item.Released,
-		Rating: item.imdbRating,
-		Poster: item.Poster
-	}
-	})
-	return movieData;
 }
 
 //Defining the date formatting function
-var parseDate = d3.time.format('%d_%m_%Y').parse;
-
-
-
+var parseDate = d3.time.format('%d_%b_%Y').parse;
 
 var svg = d3.select("#content").append('svg')
 	.attr('width', width + margin.left + margin.right)
@@ -99,6 +69,34 @@ function sortByDates(a, b){
 }
 
 var x = d3.time.scale()
-	//.domain(d3.extent(released))
+	.range([0,width]);
+	
+function visualize(movie){
+	var results = movieSearch(movie)
+	results.then(function(data){
+		console.log(data)
+	})
+	return results;
+}
+
+var search = "\"Martin\""
 
 
+var newTest = movieSearch(search);
+
+function formatData(data){
+	var dataSet = data.map((item) => {
+		return {
+			score: item.Metascore,
+			date: parseDate(item.Released),
+			poster: item.Poster,
+			title: item.Title
+			}
+		});
+		dataSet.sort(sortByDates)
+		debugger;
+		return dataSet;
+}
+
+
+	
