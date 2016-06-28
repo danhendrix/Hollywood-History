@@ -8,7 +8,7 @@ var margin = {
 var width = 1200 - margin.left - margin.right;
 var height = 400 - margin.top - margin.bottom;
 
-var mySearch = movieSearch("Martin")
+var mySearch = movieSearch("Martin","")
 
 function getMovieData(idList){
 	var resultsList = []
@@ -71,18 +71,21 @@ function sortByDates(a, b){
 var x = d3.time.scale()
 	.range([0,width]);
 	
-function visualize(movie){
-	var results = movieSearch(movie)
-	results.then(function(data){
-		console.log(data)
-	})
+function visualize(){
+	var title = "\"" + document.getElementById("title").value + "\"";
+	var year = "\"" + document.getElementById("year").value + "\"";
+	var results = movieSearch(title, year)
+	/*results.then(function(data){
+		formatData(data)
+	})*/
+	console.log(results)
 	return results;
 }
 
-var search = "\"Martin\""
+//var search = "\"Batman\""
 
 
-var newTest = movieSearch(search);
+//var newTest = visualize(search);
 
 function formatData(data){
 	var dataSet = data.map((item) => {
@@ -94,9 +97,8 @@ function formatData(data){
 			}
 		});
 		dataSet.sort(sortByDates)
-		debugger;
 		return dataSet;
 }
-
+var cmon = movieSearch("Potter","")
 
 	
