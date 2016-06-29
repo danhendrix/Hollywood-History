@@ -43,6 +43,7 @@ var yAxis = d3.svg.axis().scale(y)
 
 function movieSearch(title, year){
 	var url = "http://www.omdbapi.com/?s=" + title + "&page=1&r=JSON&y=" + year;
+	debugger;
 	return new Promise(function(resolve,reject){
 	$.getJSON(url)
 	.done(function(data){
@@ -70,13 +71,13 @@ var x = d3.time.scale()
 	.range([0,width]);
 	
 function visualize(){
-	var title = document.getElementById("title").value;
-	var year = document.getElementById("year").value;
+	console.log(document.getElementById("title").value);
+	title = document.getElementById("title").value;
+	year = document.getElementById("year").value;
 	var results = movieSearch(title, year)
 	/*results.then(function(data){
-		formatData(data)
+		return data;
 	})*/
-	console.log(results)
 	return results;
 }
 
@@ -95,11 +96,12 @@ function formatData(data){
 			}
 		});
 		dataSet.sort(sortByDates)
-		return dataSet;
+		debugger;
+		return console.log(dataSet);
 }
-var cmon = movieSearch(document.getElementById("title").value,"")
+//var cmon = movieSearch(document.getElementById("title").value,"")
 
 
-var cmon1 = movieSearch("Potter","")
+//var cmon1 = movieSearch("Potter","")
 
 	
