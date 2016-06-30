@@ -8,19 +8,6 @@ var margin = {
 var width = 1200 - margin.left - margin.right;
 var height = 400 - margin.top - margin.bottom;
 
-function getMovieData(idList){
-	var resultsList = []
-		for(i in idList){
-			var url = 'http://www.omdbapi.com/?i='+idList[i]+'&plot=short&r=json';
-			var movieResults = new Promise(function(resolve,reject){	
-			$.getJSON(url)
-			.then(function(data){
-				return resolve(resultsList.push(data));
-				})
-		})}
-	return resultsList;
-}
-
 //Defining the date formatting function
 var parseDate = d3.time.format('%d_%b_%Y').parse;
 
@@ -43,7 +30,6 @@ var yAxis = d3.svg.axis().scale(y)
 
 function movieSearch(title, year){
 	var url = "http://www.omdbapi.com/?s=" + title + "&page=1&r=JSON&y=" + year;
-	debugger;
 	return new Promise(function(resolve,reject){
 	$.getJSON(url)
 	.done(function(data){
@@ -63,6 +49,21 @@ function formatSearch(data){
 	return getMovieData(searchData);
 }
 
+function getMovieData(idList){
+	var resultsList = [];
+		for(i in idList){
+			var url = 'http://www.omdbapi.com/?i='+idList[i]+'&plot=short&r=json';
+			var results = new Promise(function(resolve,reject){	
+			$.getJSON(url,function(json){
+			resolve(resultsList.push(json));
+			})
+		})}
+	return Promise.all([resultsList,results]).then(data =>{
+		return formatData(data[0]);
+	})
+}
+
+
 function sortByDates(a, b){
 	return a.date-b.date;
 }
@@ -70,23 +71,20 @@ function sortByDates(a, b){
 var x = d3.time.scale()
 	.range([0,width]);
 	
-function visualize(){
+function initialize(){
 	console.log(document.getElementById("title").value);
 	title = document.getElementById("title").value;
 	year = document.getElementById("year").value;
-	var results = movieSearch(title, year)
-	/*results.then(function(data){
-		return data;
-	})*/
+	var results = movieSearch(title,year);
 	return results;
 }
 
-//var search = "\"Batman\""
+var newTest = initialize();
 
-
-var newTest = visualize();
+Promise.all([newTest]).then(data =>{console.log(data)});
 
 function formatData(data){
+	debugger;
 	var dataSet = data.map((item) => {
 		return {
 			score: item.Metascore,
@@ -95,13 +93,14 @@ function formatData(data){
 			title: item.Title
 			}
 		});
-		dataSet.sort(sortByDates)
-		debugger;
-		return console.log(dataSet);
+		//dataSet.sort(sortByDates)
+
+		return dataSet;
 }
 //var cmon = movieSearch(document.getElementById("title").value,"")
 
 
 //var cmon1 = movieSearch("Potter","")
+
 
 	
