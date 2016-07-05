@@ -9,7 +9,8 @@ var width = 1200 - margin.left - margin.right;
 var height = 400 - margin.top - margin.bottom;
 
 //Defining the date formatting function
-var parseDate = d3.time.format('%d_%b_%Y').parse;
+
+var parseDate = d3.time.format('%d %b %Y').parse;
 
 var svg = d3.select("#content").append('svg')
 	.attr('width', width + margin.left + margin.right)
@@ -26,7 +27,6 @@ var xAxis = d3.svg.axis().scale(x)
 	.orient('bottom').ticks(12);
 var yAxis = d3.svg.axis().scale(y)
 	.orient('left').ticks(10);
-
 
 function movieSearch(title, year){
 	var url = "http://www.omdbapi.com/?s=" + title + "&page=1&r=JSON&y=" + year;
@@ -63,7 +63,6 @@ function getMovieData(idList){
 	})
 }
 
-
 function sortByDates(a, b){
 	return a.date-b.date;
 }
@@ -75,16 +74,18 @@ function initialize(){
 	console.log(document.getElementById("title").value);
 	title = document.getElementById("title").value;
 	year = document.getElementById("year").value;
-	var results = movieSearch(title,year);
-	return results;
+	return movieSearch(title,year)
+	.then(data=>{
+		var dates = data.map((item) => {
+			return item.date;
+		})
+		return dates;
+	});
 }
 
 var newTest = initialize();
 
-Promise.all([newTest]).then(data =>{console.log(data)});
-
 function formatData(data){
-	debugger;
 	var dataSet = data.map((item) => {
 		return {
 			score: item.Metascore,
@@ -93,14 +94,9 @@ function formatData(data){
 			title: item.Title
 			}
 		});
-		//dataSet.sort(sortByDates)
-
+		dataSet.sort(sortByDates)
 		return dataSet;
 }
-//var cmon = movieSearch(document.getElementById("title").value,"")
-
-
-//var cmon1 = movieSearch("Potter","")
 
 
 	
