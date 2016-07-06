@@ -95,6 +95,17 @@ function initialize(){
 	svg.append('g')
 		.attr('class', 'y axis')
 		.call(yAxis);
+		
+	visualize();
+
+}
+
+function visualize(){
+	console.log(document.getElementById("title").value);
+	title = document.getElementById("title").value;
+	year = document.getElementById("year").value;
+	let dataSet = movieSearch(title,year);
+	debugger;
 	var dates = _.map(dataSet,'date');
 	var scores = _.map(dataSet,'score');
 	var posters = _.map(dataSet,'poster');
