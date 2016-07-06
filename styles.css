@@ -7,21 +7,13 @@ body {
   height: 500px;
   background-color: #F2F9FC;
   border-style: solid;
-  border-width: 5px;
+  border-width: 1px;
   border-color: black;
 }
-.axis path, .axis line {
-  fill: none;
-  stroke: #000;
-  stroke-width: 1px;
-  shape-rendering: crispEdges;
+.bubble{
+	display: inline-block;
+	fill-opacity: 0.5;
+	stroke:  black;
+	stroke-weight: 1px;
 }
-g {
-  font-family: Lato;
-  font-size: 12px;
-}
-.line {
-  stroke: cornflowerBlue;
-  stroke-width: 1px;
-  fill: none;
-}
+

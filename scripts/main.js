@@ -1,12 +1,12 @@
 var margin = {
-	top: 20,
-	right: 20,
-	bottom: 20,
-	left: 20
+	top: 30,
+	right: 30,
+	bottom: 30,
+	left: 30
 }
 
-var width = 1200 - margin.left - margin.right;
-var height = 400 - margin.top - margin.bottom;
+var width = 800 - margin.left - margin.right;
+var height = 500 - margin.top - margin.bottom;
 
 //Defining the date formatting function
 
@@ -15,6 +15,7 @@ var parseDate = d3.time.format('%d %b %Y').parse;
 var svg = d3.select("#content").append('svg')
 	.attr('width', width + margin.left + margin.right)
 	.attr('height', height + margin.top + margin.bottom)
+	.attr("class", "bubble")
 	.append('g')
 	.attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
@@ -22,14 +23,6 @@ var svg = d3.select("#content").append('svg')
 var x = d3.time.scale().range([0, width]);
 var y = d3.scale.linear().range([height - 1, 0]);
 
-var line = d3.svg.line()
-	.x(function(d){
-		return x(d.dates);
-	})
-	.y(function(d){
-		return y(d.scores);
-	})
-	.interpolate('linear');
 
 //defining axis
 var xAxis = d3.svg.axis().scale(x)
@@ -75,19 +68,8 @@ function getMovieData(idList){
 function sortByDates(a, b){
 	return a.date-b.date;
 }
-
-var x = d3.time.scale()
-	.range([0,width]);
 	
 function initialize(){
-	console.log(document.getElementById("title").value);
-	title = document.getElementById("title").value;
-	year = document.getElementById("year").value;
-	let dataSet = movieSearch(title,year);
-	
-	svg.append('path')
-		.attr('class','line')
-		.attr('d', line(dataSet));
 	svg.append('g')
 		.attr('class', 'x axis')
 		.attr('transform', 'translate(0,' + height + ')')
@@ -97,7 +79,6 @@ function initialize(){
 		.call(yAxis);
 		
 	visualize();
-
 }
 
 function visualize(){
@@ -105,26 +86,39 @@ function visualize(){
 	title = document.getElementById("title").value;
 	year = document.getElementById("year").value;
 	let dataSet = movieSearch(title,year);
-	debugger;
-	var dates = _.map(dataSet,'date');
-	var scores = _.map(dataSet,'score');
-	var posters = _.map(dataSet,'poster');
-	var titles = _.map(dataSet,'title');
+	Promise.all([dataSet]).then(data=>{
+	var dates = _.map(data[0],'date');
+	var scores = _.map(data[0],'score');
+	var posters = _.map(data[0],'poster');
+	var titles = _.map(data[0],'title');
 
 	y.domain([1,100])
 	x.domain(d3.extent(dates))
 	
 	var updateSvg = d3.select('#content').transition()
-	
-	updateSvg.select('.line')
+	/*updateSvg.select(".bubble")
 		.duration(500)
-		.attr('d', line(dataSet))
+		.attr('d')*/
 	updateSvg.select('.x.axis')
-		.duration(500)
+		.duration(100)
 		.call(xAxis);
 	updateSvg.select('.y.axis')
-		.duration(500)
+		.duration(100)
 		.call(yAxis);
+	
+	svg.selectAll('circle')
+		.data(dataSet)
+		.enter()
+		.append('circle')
+		.attr('class', 'bubble')
+		.attr('cx', function(dataSet){
+			return x(dates)
+		})
+		.attr('cy', function(data){
+			return y(scores);
+		})
+		.attr('r', '50');
+})
 }
 initialize();
 
