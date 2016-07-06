@@ -22,6 +22,15 @@ var svg = d3.select("#content").append('svg')
 var x = d3.time.scale().range([0, width]);
 var y = d3.scale.linear().range([height - 1, 0]);
 
+var line = d3.svg.line()
+	.x(function(d){
+		return x(d.dates);
+	})
+	.y(function(d){
+		return y(d.scores);
+	})
+	.interpolate('linear');
+
 //defining axis
 var xAxis = d3.svg.axis().scale(x)
 	.orient('bottom').ticks(12);
@@ -74,16 +83,39 @@ function initialize(){
 	console.log(document.getElementById("title").value);
 	title = document.getElementById("title").value;
 	year = document.getElementById("year").value;
-	return movieSearch(title,year)
-	.then(data=>{
-		var dates = data.map((item) => {
-			return item.date;
-		})
-		return dates;
-	});
-}
+	let dataSet = movieSearch(title,year);
+	
+	svg.append('path')
+		.attr('class','line')
+		.attr('d', line(dataSet));
+	svg.append('g')
+		.attr('class', 'x axis')
+		.attr('transform', 'translate(0,' + height + ')')
+		.call(xAxis);
+	svg.append('g')
+		.attr('class', 'y axis')
+		.call(yAxis);
+	var dates = _.map(dataSet,'date');
+	var scores = _.map(dataSet,'score');
+	var posters = _.map(dataSet,'poster');
+	var titles = _.map(dataSet,'title');
 
-var newTest = initialize();
+	y.domain([1,100])
+	x.domain(d3.extent(dates))
+	
+	var updateSvg = d3.select('#content').transition()
+	
+	updateSvg.select('.line')
+		.duration(500)
+		.attr('d', line(dataSet))
+	updateSvg.select('.x.axis')
+		.duration(500)
+		.call(xAxis);
+	updateSvg.select('.y.axis')
+		.duration(500)
+		.call(yAxis);
+}
+initialize();
 
 function formatData(data){
 	var dataSet = data.map((item) => {
