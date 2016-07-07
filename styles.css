@@ -12,6 +12,7 @@ body {
 }
 .bubble{
 	display: inline-block;
+	fill: tomato;
 	fill-opacity: 0.5;
 	stroke:  black;
 	stroke-weight: 1px;

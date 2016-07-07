@@ -15,7 +15,6 @@ var parseDate = d3.time.format('%d %b %Y').parse;
 var svg = d3.select("#content").append('svg')
 	.attr('width', width + margin.left + margin.right)
 	.attr('height', height + margin.top + margin.bottom)
-	.attr("class", "bubble")
 	.append('g')
 	.attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
@@ -26,7 +25,7 @@ var y = d3.scale.linear().range([height - 1, 0]);
 
 //defining axis
 var xAxis = d3.svg.axis().scale(x)
-	.orient('bottom').ticks(12);
+	.orient('bottom').ticks(10);
 var yAxis = d3.svg.axis().scale(y)
 	.orient('left').ticks(10);
 
@@ -86,6 +85,7 @@ function visualize(){
 	title = document.getElementById("title").value;
 	year = document.getElementById("year").value;
 	let dataSet = movieSearch(title,year);
+	
 	Promise.all([dataSet]).then(data=>{
 	var dates = _.map(data[0],'date');
 	var scores = _.map(data[0],'score');
@@ -107,17 +107,21 @@ function visualize(){
 		.call(yAxis);
 	
 	svg.selectAll('circle')
-		.data(dataSet)
+		.data(data)
 		.enter()
 		.append('circle')
 		.attr('class', 'bubble')
-		.attr('cx', function(dataSet){
+		.attr('cx', function(data){
 			return x(dates)
 		})
 		.attr('cy', function(data){
 			return y(scores);
 		})
-		.attr('r', '50');
+		.attr('r', '20')
+		.style('background-image', function(data){
+			return posters;
+		})
+		debugger;
 })
 }
 initialize();
