@@ -87,7 +87,7 @@ function visualize(){
 	let dataSet = movieSearch(title,year);
 	
 	dataSet.then(data=>{
-		debugger;
+	console.log(data)
 	var dates = _.map(data,'date');
 	var scores = _.map(data,'score');
 	var posters = _.map(data,'poster');
@@ -107,7 +107,7 @@ function visualize(){
 		.duration(100)
 		.call(yAxis);
 	
-	svg.selectAll('circle')
+	var circle = svg.selectAll('circle')
 		.data(data)
 		.enter()
 		.append('circle')
@@ -138,4 +138,11 @@ function formatData(data){
 }
 
 
+function updatePlot(){
+	var circle = svg.selectAll('circle')
+	circle.transition()
+	.attr("r",0)
+	.remove();
 	
+	visualize();
+}
