@@ -86,11 +86,12 @@ function visualize(){
 	year = document.getElementById("year").value;
 	let dataSet = movieSearch(title,year);
 	
-	Promise.all([dataSet]).then(data=>{
-	var dates = _.map(data[0],'date');
-	var scores = _.map(data[0],'score');
-	var posters = _.map(data[0],'poster');
-	var titles = _.map(data[0],'title');
+	dataSet.then(data=>{
+		debugger;
+	var dates = _.map(data,'date');
+	var scores = _.map(data,'score');
+	var posters = _.map(data,'poster');
+	var titles = _.map(data,'title');
 
 	y.domain([1,100])
 	x.domain(d3.extent(dates))
@@ -111,30 +112,27 @@ function visualize(){
 		.enter()
 		.append('circle')
 		.attr('class', 'bubble')
-		.attr('cx', function(data){
-			return x(dates)
-		})
-		.attr('cy', function(data){
-			return y(scores);
-		})
+		.attr('cx', function(d){return x(d.date)})
+		.attr('cy', function(d){return y(d.score)})
 		.attr('r', '20')
-		.style('background-image', function(data){
+		/*.style('background-image', function(data){
 			return posters;
-		})
-		debugger;
+		})*/
 })
 }
 initialize();
 
 function formatData(data){
 	var dataSet = data.map((item) => {
+		item.Metascore = parseInt(item.Metascore);
+		item.Metascore = item.Metascore || 0;
 		return {
 			score: item.Metascore,
 			date: parseDate(item.Released),
 			poster: item.Poster,
 			title: item.Title
 			}
-		});
+	});
 		dataSet.sort(sortByDates)
 		return dataSet;
 }
