@@ -119,14 +119,22 @@ function visualize(){
 			return posters;
 		})*/
 		
-	var imgs = svg.selectAll("image").data(data)
-		.enter()
+	let imgs = svg.selectAll("image").data(data);
+		imgs.exit().transition()
+		.attr("width","0")
+		.attr("height","0");
+		
+		imgs.enter()
 		.append("svg:image")
 		.attr("xlink:href", function(d){return d.poster})
 		.attr('x', function(d){return x(d.date)})
 		.attr('y', function(d){return y(d.score)})
-		.attr("width", "50")
-		.attr("height", "50");
+		.attr("width", "0")
+		.attr("height", "0");
+	imgs.transition()
+		.attr("height", "50")
+		.attr("width", "50");
+		//.duration(100)
 })
 }
 initialize();
@@ -134,7 +142,7 @@ initialize();
 function formatData(data){
 	var dataSet = data.map((item) => {
 		item.Metascore = parseInt(item.Metascore);
-		item.Metascore = item.Metascore || 0;
+		item.Metascore = item.Metascore || 50;
 		return {
 			score: item.Metascore,
 			date: parseDate(item.Released),
@@ -148,11 +156,12 @@ function formatData(data){
 
 
 function updatePlot(){
-	var imgs = svg.selectAll('image')
+	svg.selectAll('image')
 	.transition()
-	.attr("r",0)
-	.remove();
-
+	.attr("width",0)
+	.attr("height", 0)
+	.duration(1000);
+	svg.selectAll('image').remove();
 	
 	visualize();
 }
