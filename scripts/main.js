@@ -107,7 +107,7 @@ function visualize(){
 		.duration(100)
 		.call(yAxis);
 	
-	var circle = svg.selectAll('circle')
+	/*var circle = svg.selectAll('circle')
 		.data(data)
 		.enter()
 		.append('circle')
@@ -118,6 +118,15 @@ function visualize(){
 		/*.style('background-image', function(data){
 			return posters;
 		})*/
+		
+	var imgs = svg.selectAll("image").data(data)
+		.enter()
+		.append("svg:image")
+		.attr("xlink:href", function(d){return d.poster})
+		.attr('x', function(d){return x(d.date)})
+		.attr('y', function(d){return y(d.score)})
+		.attr("width", "50")
+		.attr("height", "50");
 })
 }
 initialize();
@@ -139,10 +148,11 @@ function formatData(data){
 
 
 function updatePlot(){
-	var circle = svg.selectAll('circle')
-	circle.transition()
+	var imgs = svg.selectAll('image')
+	.transition()
 	.attr("r",0)
 	.remove();
+
 	
 	visualize();
 }
