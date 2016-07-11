@@ -135,6 +135,9 @@ function visualize(){
 		.attr("height", "50")
 		.attr("width", "50");
 		//.duration(100)
+		
+	imgs.append("svg:title")
+		.text(function(d){return d.title;});
 })
 }
 initialize();
