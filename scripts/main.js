@@ -30,7 +30,7 @@ var yAxis = d3.svg.axis().scale(y)
 	.orient('left').ticks(10);
 
 function movieSearch(title, year){
-	var url = "http://www.omdbapi.com/?s=" + title + "&page=1&r=JSON&y=" + year;
+	var url = "https://www.omdbapi.com/?s=" + title + "&page=1&r=JSON&y=" + year;
 	return new Promise(function(resolve,reject){
 	$.getJSON(url)
 	.done(function(data){
