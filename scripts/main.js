@@ -53,7 +53,7 @@ function formatSearch(data){
 function getMovieData(idList){
 	var resultsList = [];
 		for(i in idList){
-			var url = 'http://www.omdbapi.com/?i='+idList[i]+'&plot=short&r=json';
+			var url = 'https://www.omdbapi.com/?i='+idList[i]+'&plot=short&r=json';
 			var results = new Promise(function(resolve,reject){	
 			$.getJSON(url,function(json){
 			resolve(resultsList.push(json));
